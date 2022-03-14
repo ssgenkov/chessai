@@ -7,7 +7,7 @@ class Figure(ABC):
         self.figure_type = figure_type
 
     @abstractmethod
-    def get_possible_moves(self, state, col, row):
+    def get_potential_moves(self, state, cord):
         pass
 
     def _is_in_the_board(self, row, col):

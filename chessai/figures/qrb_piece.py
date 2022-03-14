@@ -1,25 +1,36 @@
 from chessai.figures.figure import Figure
-
+from chessai.moves.move import Move
+from chessai.moves.moves_factory import get_movement
+from chessai.utils.cord import ROW, COLUMN
 
 class QRBPiece(Figure):
     def __init__(self, color, figure_type, moves):
         super().__init__(color, figure_type)
         self.moves = moves
 
-    def get_possible_moves(self, state, col, row):
-        possible_moves = []
+    def get_potential_moves(self, state, cord):
+        row = cord[ROW]  
+        col = cord[COLUMN]
 
-        for col_chg, row_chg in zip(self.col_change, self.row_change):
-            col_new = col + col_chg
-            row_new = row + row_chg
-            while self._is_in_the_board(col_new, row_new):
-                if f"{col_new}{row_new}" in state:
-                    if state[f"{col_new}{row_new}"].color != self.color:
-                        possible_moves.append(f"{col}{row}{self.sep}{col_new}{row_new}")
+        potential_moves = []
+
+        for move in self.moves:
+            mov_row, mov_col = get_movement(move)
+            pot_row = row + mov_row
+            pot_col = col + mov_col
+            while self._is_in_the_board(pot_row, pot_col):
+                pot_fig = state.get_figure_by_cord((pot_row, pot_col))
+                if pot_fig:
+                    if pot_fig.color != self.color:
+                        potential_moves.append((pot_row, pot_col))
                     break
                 else:
-                    possible_moves.append(f"{col}{row}{self.sep}{col_new}{row_new}")
-                col_new = col_new + col_chg
-                row_new = row_new + row_chg
+                    potential_moves.append((pot_row, pot_col))
+                pot_row = pot_row + mov_row 
+                pot_col = pot_col + mov_col
 
-        return possible_moves
+        return potential_moves
+
+
+    def get_moves(self):
+        return self.moves
