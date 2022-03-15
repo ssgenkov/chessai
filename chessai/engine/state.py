@@ -26,6 +26,9 @@ class State:
 
         return figures
 
+    def get_board_copy(self):
+        return dict(self._board)
+
     def get_figure_by_cord(self, cords):
         row = cords[ROW]
         col = cords[COLUMN]
