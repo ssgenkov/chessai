@@ -18,9 +18,8 @@ class King(Figure):
             mov_row, mov_col = get_movement(move)
             pot_row = row + mov_row
             pot_col = col + mov_col
-            if (
-                    self._is_in_the_board(pot_row, pot_col)
-                    and not self._is_king_around(state, pot_row, pot_col)
+            if self._is_in_the_board(pot_row, pot_col) and not self._is_king_around(
+                state, pot_row, pot_col
             ):
                 pot_fig = state.get_figure_by_cord((pot_row, pot_col))
                 if pot_fig:
@@ -30,7 +29,7 @@ class King(Figure):
                 else:
                     potential_moves.append((pot_row, pot_col))
 
-        return potential_moves
+        return set(((cord, mov) for mov in potential_moves))
 
     def _is_king_around(self, state, row, col):
         for move in Move:

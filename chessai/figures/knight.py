@@ -25,4 +25,4 @@ class Knight(Figure):
                         else:
                             potential_moves.append((pot_row, pot_col))
 
-        return potential_moves
+        return set(((cord, mov) for mov in potential_moves))

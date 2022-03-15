@@ -38,4 +38,4 @@ class Pawn(Figure):
                 if pot_fig and pot_fig.color != self.color:
                     potential_moves.append((pot_row, pot_col))
 
-        return potential_moves
+        return set(((cord, mov) for mov in potential_moves))

@@ -2,10 +2,10 @@ from chessai.engine.state import State
 from chessai.figures.figure_type import FigureType
 from chessai.figures.factory import get_figure
 from chessai.utils.color import Color
+from chessai.moves.move import CURNT, DEST
 
 
 class TestQueen:
-
     def test_queen(self):
 
         w_queen_cord = (6, 6)
@@ -16,12 +16,11 @@ class TestQueen:
 
         b_rook_cord = (4, 6)
         b_knight_cord = (4, 4)
-        
 
         board = dict()
 
         queen_to_test = get_figure(Color.WHITE, FigureType.QUEEN)
-    
+
         board[w_queen_cord] = queen_to_test
 
         board[w_pawn1_cord] = get_figure(Color.WHITE, FigureType.PAWN)
@@ -30,7 +29,6 @@ class TestQueen:
 
         board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
         board[b_knight_cord] = get_figure(Color.BLACK, FigureType.KNIGHT)
-        
 
         state = State(board)
 
@@ -38,4 +36,23 @@ class TestQueen:
 
         assert len(potential_moves) == 14
 
-        assert set([b_rook_cord,b_knight_cord,  (5,6), (6,4),  (6,5), (6,7), (7,6), (8, 6), (5,5), (5,7), (4,8), (7,5), (7,7), (8,8)]) == set(potential_moves)
+        assert set([w_queen_cord]) == set((mov[CURNT] for mov in potential_moves))
+
+        assert set(
+            [
+                b_rook_cord,
+                b_knight_cord,
+                (5, 6),
+                (6, 4),
+                (6, 5),
+                (6, 7),
+                (7, 6),
+                (8, 6),
+                (5, 5),
+                (5, 7),
+                (4, 8),
+                (7, 5),
+                (7, 7),
+                (8, 8),
+            ]
+        ) == set((mov[DEST] for mov in potential_moves))

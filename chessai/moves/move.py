@@ -1,5 +1,8 @@
 from enum import Enum
 
+CURNT = 0
+DEST = 1
+
 
 class Move(Enum):
     UP = "UP"

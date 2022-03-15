@@ -30,7 +30,7 @@ class QRBPiece(Figure):
                 pot_row = pot_row + mov_row
                 pot_col = pot_col + mov_col
 
-        return potential_moves
+        return set(((cord, mov) for mov in potential_moves))
 
     def get_moves(self):
         return self.moves

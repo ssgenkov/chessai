@@ -2,10 +2,10 @@ from chessai.engine.state import State
 from chessai.figures.figure_type import FigureType
 from chessai.figures.factory import get_figure
 from chessai.utils.color import Color
+from chessai.moves.move import CURNT, DEST
 
 
 class TestBishop:
-
     def test_bishop(self):
 
         w_bishop_cord = (5, 7)
@@ -15,12 +15,11 @@ class TestBishop:
         w_pawn3_cord = (5, 6)
 
         b_rook_cord = (7, 5)
-        
 
         board = dict()
 
         bishop_to_test = get_figure(Color.WHITE, FigureType.BISHOP)
-    
+
         board[w_bishop_cord] = bishop_to_test
 
         board[w_pawn1_cord] = get_figure(Color.WHITE, FigureType.PAWN)
@@ -28,7 +27,6 @@ class TestBishop:
         board[w_pawn3_cord] = get_figure(Color.WHITE, FigureType.PAWN)
 
         board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
-        
 
         state = State(board)
 
@@ -36,4 +34,8 @@ class TestBishop:
 
         assert len(potential_moves) == 4
 
-        assert set([b_rook_cord, (4,6),  (6,6), (6,8)]) == set(potential_moves)
+        assert set([w_bishop_cord]) == set((mov[CURNT] for mov in potential_moves))
+
+        assert set([b_rook_cord, (4, 6), (6, 6), (6, 8)]) == set(
+            (mov[DEST] for mov in potential_moves)
+        )
