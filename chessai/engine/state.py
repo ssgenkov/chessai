@@ -26,7 +26,7 @@ class State:
 
         return figures
 
-    def get_figure_by_cord(self,cords):
+    def get_figure_by_cord(self, cords):
         row = cords[ROW]
         col = cords[COLUMN]
         return self._board[(row, col)] if (row, col) in self._board else None

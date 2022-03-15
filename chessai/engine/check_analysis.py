@@ -1,10 +1,9 @@
-
 from chessai.moves.move import Move
 from chessai.moves.moves_factory import get_movement
 from chessai.figures.figure_type import FigureType
 
-class CheckAnalysis:
 
+class CheckAnalysis:
     def __init__(self, color, state, king_vision):
         self._color = color
         self._state = state
@@ -23,6 +22,4 @@ class CheckAnalysis:
             if figure.color != self._color:
                 if figure.figure_type in qrb_type:
                     if move in figure.get_moves():
-                       checking_pieces.append((cord, figure, move))
-                 
-        
+                        checking_pieces.append((cord, figure, move))

@@ -3,13 +3,14 @@ from chessai.moves.move import Move
 from chessai.moves.moves_factory import get_movement
 from chessai.utils.cord import ROW, COLUMN
 
+
 class QRBPiece(Figure):
     def __init__(self, color, figure_type, moves):
         super().__init__(color, figure_type)
         self.moves = moves
 
     def get_potential_moves(self, state, cord):
-        row = cord[ROW]  
+        row = cord[ROW]
         col = cord[COLUMN]
 
         potential_moves = []
@@ -26,11 +27,10 @@ class QRBPiece(Figure):
                     break
                 else:
                     potential_moves.append((pot_row, pot_col))
-                pot_row = pot_row + mov_row 
+                pot_row = pot_row + mov_row
                 pot_col = pot_col + mov_col
 
         return potential_moves
-
 
     def get_moves(self):
         return self.moves

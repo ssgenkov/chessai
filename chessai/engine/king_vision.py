@@ -19,12 +19,14 @@ class KingVision:
             col_chk = king_col + mov_col
             while row_chk > 0 and row_chk < 9 and col_chk > 0 and col_chk < 9:
                 if state.get_figure_by_cord((row_chk, col_chk)):
-                    vision[(row_chk, col_chk)] = (state.get_figure_by_cord((row_chk, col_chk)), move)
+                    vision[(row_chk, col_chk)] = (
+                        state.get_figure_by_cord((row_chk, col_chk)),
+                        move,
+                    )
                     break
 
                 row_chk = row_chk + mov_row
                 col_chk = col_chk + mov_col
-
 
         return vision
 

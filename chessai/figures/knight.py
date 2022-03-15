@@ -2,14 +2,15 @@ from chessai.figures.figure import Figure
 from chessai.figures.figure_type import FigureType
 from chessai.utils.cord import ROW, COLUMN
 
+
 class Knight(Figure):
     def __init__(self, color):
         super().__init__(color, FigureType.KNIGHT)
 
     def get_potential_moves(self, state, cord):
-        row = cord[ROW]  
+        row = cord[ROW]
         col = cord[COLUMN]
-        
+
         potential_moves = []
         for row_inc, col_inc in [(1, 2), (2, 1)]:
             for row_dir in [1, -1]:
@@ -25,4 +26,3 @@ class Knight(Figure):
                             potential_moves.append((pot_row, pot_col))
 
         return potential_moves
-
