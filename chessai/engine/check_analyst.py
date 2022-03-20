@@ -29,7 +29,7 @@ class CheckAnalyst:
                     interposing_col = king_cord[COLUMN] + mov_col
                     while (
                         interposing_row != cord_of_piece_to_capture[ROW]
-                        and interposing_col != cord_of_piece_to_capture[COLUMN]
+                        or interposing_col != cord_of_piece_to_capture[COLUMN]
                     ):
                         interposing_dest_coordinates.append(
                             (interposing_row, interposing_col)
@@ -61,7 +61,7 @@ class CheckAnalyst:
         return CheckAnalysis(
             there_is_check,
             cord_of_piece_to_capture,
-            interposing_dest_coordinates,
+            set(interposing_dest_coordinates),
             king_legal_moves,
         )
 

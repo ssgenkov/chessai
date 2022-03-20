@@ -225,8 +225,92 @@ class TestCheckAnalyst:
 
         assert check_analysis.cord_of_piece_to_capture == None
 
-        assert check_analysis.interposing_dest_coordinates == []
+        assert check_analysis.interposing_dest_coordinates == set()
 
         assert set([b_king_cord]) == set((mov[CURNT] for mov in check_analysis.king_legal_moves))
 
         assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set([(5, 5), (3, 5),(3, 4),(3, 6)])
+
+    def test_get_check_analysis_b_1cp_capturing(self):
+
+        b_king_cord = (4, 5)
+        b_rook_cord = (4, 7)
+        b_knight_cord = (5, 4)
+        b_bishop_cord = (7, 8)
+
+        w_knight_cord = (6, 4)
+        w_bishop_cord = (7, 2)
+        w_pawn_cord = (3, 5)
+
+        board = dict()
+
+        king_to_check = get_figure(Color.BLACK, FigureType.KING)
+
+        board[b_king_cord] = king_to_check
+        board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
+        board[b_knight_cord] = get_figure(Color.BLACK, FigureType.KNIGHT)
+        board[b_bishop_cord] = get_figure(Color.BLACK, FigureType.BISHOP)
+
+        board[w_knight_cord] = get_figure(Color.WHITE, FigureType.KNIGHT)
+        board[w_bishop_cord] = get_figure(Color.WHITE, FigureType.BISHOP)
+        board[w_pawn_cord] = get_figure(Color.WHITE, FigureType.PAWN)
+
+        state = State(board)
+
+        check_analyst = CheckAnalyst()
+
+        check_analysis = check_analyst.get_analysis(
+            king_to_check.color, state, KingVision(king_to_check.color, state)
+        )
+
+        assert check_analysis.there_is_check
+
+        assert check_analysis.cord_of_piece_to_capture == w_knight_cord
+
+        assert check_analysis.interposing_dest_coordinates == set()
+
+        assert set([b_king_cord]) == set((mov[CURNT] for mov in check_analysis.king_legal_moves))
+
+        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set([(5, 5), (3, 5),(3, 4),(3, 6)])
+
+    def test_get_check_analysis_b_1cp_interposing(self):
+
+        b_king_cord = (4, 5)
+        b_rook_cord = (4, 7)
+        b_knight_cord = (5, 4)
+        b_bishop_cord = (7, 8)
+
+        w_queen_cord = (4, 2)
+        w_bishop_cord = (7, 2)
+        w_pawn_cord = (3, 5)
+
+        board = dict()
+
+        king_to_check = get_figure(Color.BLACK, FigureType.KING)
+
+        board[b_king_cord] = king_to_check
+        board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
+        board[b_knight_cord] = get_figure(Color.BLACK, FigureType.KNIGHT)
+        board[b_bishop_cord] = get_figure(Color.BLACK, FigureType.BISHOP)
+
+        board[w_queen_cord] = get_figure(Color.WHITE, FigureType.QUEEN)
+        board[w_bishop_cord] = get_figure(Color.WHITE, FigureType.BISHOP)
+        board[w_pawn_cord] = get_figure(Color.WHITE, FigureType.PAWN)
+
+        state = State(board)
+
+        check_analyst = CheckAnalyst()
+
+        check_analysis = check_analyst.get_analysis(
+            king_to_check.color, state, KingVision(king_to_check.color, state)
+        )
+
+        assert check_analysis.there_is_check
+
+        assert check_analysis.cord_of_piece_to_capture == w_queen_cord
+
+        assert check_analysis.interposing_dest_coordinates == set([(4,4), (4,3)])
+
+        assert set([b_king_cord]) == set((mov[CURNT] for mov in check_analysis.king_legal_moves))
+
+        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set([(5, 5), (3, 5),(3, 4),(3, 6), (5, 6)])

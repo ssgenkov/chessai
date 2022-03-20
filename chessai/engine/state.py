@@ -29,6 +29,9 @@ class State:
     def get_board_copy(self):
         return dict(self._board)
 
+    def get_copy(self):
+        return State(self.get_board_copy())
+
     def get_figure_by_cord(self, cords):
         row = cords[ROW]
         col = cords[COLUMN]
@@ -37,3 +40,6 @@ class State:
     def get_figures_cord(self, color, figure_type):
         # TODO this list() may be removed due to performance issues
         return list(self._figures[color][figure_type])
+
+    def get_pieces_cords_for_color(self, color):
+        return [cord for cord in self._board if self._board[cord].color == color]
