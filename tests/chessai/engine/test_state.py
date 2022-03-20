@@ -2,6 +2,7 @@ from chessai.engine.state import State
 from chessai.figures.figure_type import FigureType
 from chessai.figures.factory import get_figure
 from chessai.utils.color import Color
+from chessai.utils.castle_figures import CastleFigureType
 
 
 class TestState:
@@ -44,3 +45,18 @@ class TestState:
 
         assert black_king.color == Color.BLACK
         assert black_king.figure_type == FigureType.KING
+
+    def test_has_moved(self):
+        state = State(self.board)
+
+        assert state.has_moved(Color.WHITE, CastleFigureType.ROOK_KINGSIDE) == False
+
+        state.set_has_moved(Color.WHITE, CastleFigureType.ROOK_KINGSIDE)
+
+        assert state.has_moved(Color.WHITE, CastleFigureType.ROOK_KINGSIDE) == True
+
+        assert state.has_moved(Color.BLACK, CastleFigureType.KING) == False
+
+        state.set_has_moved(Color.BLACK, CastleFigureType.KING)
+
+        assert state.has_moved(Color.BLACK, CastleFigureType.KING) == True

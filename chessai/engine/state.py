@@ -5,10 +5,12 @@ from chessai.figures.figure_type import FigureType
 
 
 class State:
-    def __init__(self, board, figures=None):
+    def __init__(self, board, figures=None, has_moved=None):
         self._board = board
         if figures is None:
             self._figures = self._build_and_get_figures(board)
+
+        self._has_moved = has_moved
 
     def _build_and_get_figures(self, board):
         figures = self._get_init_figures_dict()
@@ -26,11 +28,31 @@ class State:
 
         return figures
 
+    def set_has_moved(self, color, castle_figure_type):
+        if self._has_moved is None:
+            self._has_moved = defaultdict(dict)
+
+        self._has_moved[color][castle_figure_type] = "YES"
+
+    def has_moved(self, color, castle_figure_type):
+        if self._has_moved:
+            return (
+                color in self._has_moved
+                and castle_figure_type in self._has_moved[color]
+            )
+        else:
+            return False
+
     def get_board_copy(self):
         return dict(self._board)
 
     def get_copy(self):
-        return State(self.get_board_copy())
+        has_moved_cpy = None
+        if self._has_moved:
+            has_moved_cpy = defaultdict(dict)
+            for color in self._has_moved:
+                has_moved_cpy[color] = dict(self._has_moved[color])
+        return State(board=self.get_board_copy(), has_moved=has_moved_cpy)
 
     def get_figure_by_cord(self, cords):
         row = cords[ROW]

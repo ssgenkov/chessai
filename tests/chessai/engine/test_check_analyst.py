@@ -112,8 +112,6 @@ class TestCheckAnalyst:
 
         board = dict()
 
-        
-
         board[b_king_cord] = get_figure(Color.BLACK, FigureType.KING)
         board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
         board[b_knight_cord] = get_figure(Color.BLACK, FigureType.KNIGHT)
@@ -154,8 +152,6 @@ class TestCheckAnalyst:
 
         board = dict()
 
-        
-
         board[b_king_cord] = get_figure(Color.BLACK, FigureType.KING)
         board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
         board[b_knight_cord] = get_figure(Color.BLACK, FigureType.KNIGHT)
@@ -185,7 +181,6 @@ class TestCheckAnalyst:
                 (b_pawn_cord, state.get_figure_by_cord(b_pawn_cord), Move.RU_DIAG),
             ]
         )
-
 
     def test_get_check_analysis_b_2cp(self):
 
@@ -227,9 +222,13 @@ class TestCheckAnalyst:
 
         assert check_analysis.interposing_dest_coordinates == set()
 
-        assert set([b_king_cord]) == set((mov[CURNT] for mov in check_analysis.king_legal_moves))
+        assert set([b_king_cord]) == set(
+            (mov[CURNT] for mov in check_analysis.king_legal_moves)
+        )
 
-        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set([(5, 5), (3, 5),(3, 4),(3, 6)])
+        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set(
+            [(5, 5), (3, 5), (3, 4), (3, 6)]
+        )
 
     def test_get_check_analysis_b_1cp_capturing(self):
 
@@ -269,9 +268,13 @@ class TestCheckAnalyst:
 
         assert check_analysis.interposing_dest_coordinates == set()
 
-        assert set([b_king_cord]) == set((mov[CURNT] for mov in check_analysis.king_legal_moves))
+        assert set([b_king_cord]) == set(
+            (mov[CURNT] for mov in check_analysis.king_legal_moves)
+        )
 
-        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set([(5, 5), (3, 5),(3, 4),(3, 6)])
+        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set(
+            [(5, 5), (3, 5), (3, 4), (3, 6)]
+        )
 
     def test_get_check_analysis_b_1cp_interposing(self):
 
@@ -309,8 +312,12 @@ class TestCheckAnalyst:
 
         assert check_analysis.cord_of_piece_to_capture == w_queen_cord
 
-        assert check_analysis.interposing_dest_coordinates == set([(4,4), (4,3)])
+        assert check_analysis.interposing_dest_coordinates == set([(4, 4), (4, 3)])
 
-        assert set([b_king_cord]) == set((mov[CURNT] for mov in check_analysis.king_legal_moves))
+        assert set([b_king_cord]) == set(
+            (mov[CURNT] for mov in check_analysis.king_legal_moves)
+        )
 
-        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set([(5, 5), (3, 5),(3, 4),(3, 6), (5, 6)])
+        assert set((mov[DEST] for mov in check_analysis.king_legal_moves)) == set(
+            [(5, 5), (3, 5), (3, 4), (3, 6), (5, 6)]
+        )
