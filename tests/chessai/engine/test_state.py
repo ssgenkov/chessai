@@ -60,3 +60,9 @@ class TestState:
         state.set_has_moved(Color.BLACK, CastleFigureType.KING)
 
         assert state.has_moved(Color.BLACK, CastleFigureType.KING) == True
+
+        assert state.get_copy().has_moved(Color.BLACK, CastleFigureType.KING) == True
+        assert (
+            state.get_copy().has_moved(Color.WHITE, CastleFigureType.ROOK_KINGSIDE)
+            == True
+        )

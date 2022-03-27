@@ -46,6 +46,15 @@ class State:
     def get_board_copy(self):
         return dict(self._board)
 
+    def remove_figure_by_cord(self, cord):
+        if cord in self._board:
+            del self._board[cord]
+            self._figures = self._build_and_get_figures(self._board)
+
+    def add_figure(self, cord, figure):
+        self._board[cord] = figure
+        self._figures = self._build_and_get_figures(self._board)
+
     def get_copy(self):
         has_moved_cpy = None
         if self._has_moved:

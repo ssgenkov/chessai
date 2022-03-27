@@ -22,20 +22,19 @@ class ValidActionsDeterminer:
 
         if check_analysis.there_is_check:
             valid_moves = []
-            if check_analysis.cord_of_piece_to_capture == None:
-                for move in check_analysis.king_legal_moves:
-                    valid_moves.append(self.get_ply_category(move))
+            for move in check_analysis.king_legal_moves:
+                valid_moves.append(self.get_ply_category(move))
 
-            valid_moves = []
-            for cord in state.get_pieces_cords_for_color(color):
-                figure = state.get_figure_by_cord(cord)
-                potential_moves = figure.get_potential_moves(state, cord)
-                for move in potential_moves:
-                    if (
-                        move[DEST] == check_analysis.cord_of_piece_to_capture
-                        or move[DEST] in check_analysis.interposing_dest_coordinates
-                    ):
-                        valid_moves.append(self.get_ply_category(move), figure)
+            if check_analysis.cord_of_piece_to_capture != None:
+                for cord in state.get_pieces_cords_for_color(color):
+                    figure = state.get_figure_by_cord(cord)
+                    potential_moves = figure.get_potential_moves(state, cord)
+                    for move in potential_moves:
+                        if (
+                            move[DEST] == check_analysis.cord_of_piece_to_capture
+                            or move[DEST] in check_analysis.interposing_dest_coordinates
+                        ) and not self._move_lead_to_own_check(color, state, move):
+                            valid_moves.append(self.get_ply_category(move, figure))
 
             return valid_moves
 
@@ -48,10 +47,10 @@ class ValidActionsDeterminer:
                 if cord in king_vision.get_vision():
                     for move in potential_moves:
                         if not self._move_lead_to_own_check(color, state, move):
-                            valid_moves.append(self.get_ply_category(move), figure)
+                            valid_moves.append(self.get_ply_category(move, figure))
                 else:
                     for move in potential_moves:
-                        valid_moves.append(self.get_ply_category(move), figure)
+                        valid_moves.append(self.get_ply_category(move, figure))
 
             if not state.has_moved(color, CastleFigureType.KING):
 
@@ -63,29 +62,31 @@ class ValidActionsDeterminer:
                     ],
                 ):
                     rook_was_moved = state.has_moved(color, rook_type)
-                    if rook_was_moved:
-                        row = 1 if Color.WHITE else 8
-                        move = [0, 0]
-                        kingside_castle_valid = True
+                    if not rook_was_moved:
+                        row = 1 if color == Color.WHITE else 8
+                        castling_valid = True
                         for col_inc in [1, 2]:
-                            move[CURNT] = (row, 5)
-                            move[DEST] = (row, 5 + direction * col_inc)
+                            move = ((row, 5), (row, 5 + direction * col_inc))
                             if state.get_figure_by_cord(
                                 move[DEST]
                             ) or self._move_lead_to_own_check(color, state, move):
-                                kingside_castle_valid = False
+                                castling_valid = False
 
-                        if kingside_castle_valid:
-                            move_king = [0, 0]
-                            move_rook = [0, 0]
-                            move_king[CURNT], move_king[DEST] = (row, 5), (
-                                row,
-                                5 + direction * 2,
+                        if castling_valid:
+                            move_king = (
+                                (row, 5),
+                                (
+                                    row,
+                                    5 + direction * 2,
+                                ),
                             )
-                            move_rook[CURNT], move_rook[DEST] = (
-                                row,
-                                8 if direction == 1 else 1,
-                            ), (row, 5 + direction)
+                            move_rook = (
+                                (
+                                    row,
+                                    8 if direction == 1 else 1,
+                                ),
+                                (row, 5 + direction),
+                            )
                             valid_moves.append(
                                 (PlyCategory.CASTLE, move_king, move_rook)
                             )
@@ -95,8 +96,8 @@ class ValidActionsDeterminer:
     def _move_lead_to_own_check(self, color, state, move):
         figure = state.get_figure_by_cord(move[CURNT])
         state_copy = state.get_copy()
-        del state_copy[move[CURNT]]
-        state_copy[move[DEST]] = figure
+        state_copy.remove_figure_by_cord(move[CURNT])
+        state_copy.add_figure(move[DEST], figure)
         king_vision_copy = KingVision(color, state_copy)
         return (
             len(
@@ -111,5 +112,7 @@ class ValidActionsDeterminer:
         if figure and figure.figure_type == FigureType.PAWN:
             if move[DEST][ROW] == 8 or move[DEST][ROW] == 1:
                 return (PlyCategory.PROMOTION, move)
+            else:
+                return (PlyCategory.MOVE, move)
         else:
             return (PlyCategory.MOVE, move)
