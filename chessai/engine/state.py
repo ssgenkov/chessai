@@ -30,9 +30,9 @@ class State:
 
     def set_has_moved(self, color, castle_figure_type):
         if self._has_moved is None:
-            self._has_moved = defaultdict(dict)
+            self._has_moved = defaultdict(set)
 
-        self._has_moved[color][castle_figure_type] = "YES"
+        self._has_moved[color].add(castle_figure_type)
 
     def has_moved(self, color, castle_figure_type):
         if self._has_moved:
@@ -58,9 +58,9 @@ class State:
     def get_copy(self):
         has_moved_cpy = None
         if self._has_moved:
-            has_moved_cpy = defaultdict(dict)
+            has_moved_cpy = defaultdict(set)
             for color in self._has_moved:
-                has_moved_cpy[color] = dict(self._has_moved[color])
+                has_moved_cpy[color] = set(self._has_moved[color])
         return State(board=self.get_board_copy(), has_moved=has_moved_cpy)
 
     def get_figure_by_cord(self, cords):

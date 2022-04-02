@@ -8,7 +8,7 @@ from chessai.figures.factory import get_figure
 from chessai.utils.color import Color
 from chessai.moves.move import CURNT, DEST
 from chessai.utils.cord import ROW, COLUMN
-from chessai.utils.castle_figures import CastleFigureType
+from chessai.utils.castle_figures import CastleFigureType, get_init_coord
 
 
 class ValidActionsDeterminer:
@@ -44,7 +44,10 @@ class ValidActionsDeterminer:
                 figure = state.get_figure_by_cord(cord)
                 potential_moves = figure.get_potential_moves(state, cord)
 
-                if cord in king_vision.get_vision():
+                if (
+                    cord in king_vision.get_vision()
+                    or figure.figure_type == FigureType.KING
+                ):
                     for move in potential_moves:
                         if not self._move_lead_to_own_check(color, state, move):
                             valid_moves.append(self.get_ply_category(move, figure))
@@ -58,19 +61,32 @@ class ValidActionsDeterminer:
                     [1, -1],
                     [
                         CastleFigureType.ROOK_KINGSIDE,
-                        CastleFigureType.ROOK_KINGSIDE.ROOK_QUEENSIDE,
+                        CastleFigureType.ROOK_QUEENSIDE,
                     ],
                 ):
                     rook_was_moved = state.has_moved(color, rook_type)
                     if not rook_was_moved:
                         row = 1 if color == Color.WHITE else 8
                         castling_valid = True
-                        for col_inc in [1, 2]:
-                            move = ((row, 5), (row, 5 + direction * col_inc))
+
+                        king_cords = get_init_coord(color, CastleFigureType.KING)
+                        col_to_check = king_cords[COLUMN] + direction
+                        rook_cords = get_init_coord(color, rook_type)
+
+                        while col_to_check != rook_cords[COLUMN]:
                             if state.get_figure_by_cord(
-                                move[DEST]
-                            ) or self._move_lead_to_own_check(color, state, move):
+                                (rook_cords[ROW], col_to_check)
+                            ):
                                 castling_valid = False
+                                break
+                            else:
+                                col_to_check += direction
+
+                        if castling_valid:
+                            for col_inc in [1, 2]:
+                                move = ((row, 5), (row, 5 + direction * col_inc))
+                                if self._move_lead_to_own_check(color, state, move):
+                                    castling_valid = False
 
                         if castling_valid:
                             move_king = (
