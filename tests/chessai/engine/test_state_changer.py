@@ -15,8 +15,6 @@ from chessai.utils.cord import ROW, COLUMN
 
 
 class TestStateChanger:
-
-
     def _get_casual_board(self):
         w_king_cord = (2, 5)
         w_rook_cord = (1, 1)
@@ -45,7 +43,6 @@ class TestStateChanger:
         board[b_knight_cord] = get_figure(Color.WHITE, FigureType.KNIGHT)
 
         return board
-
 
     def test_castles_move(self):
 
@@ -80,14 +77,17 @@ class TestStateChanger:
                 expected_board[(1, 6)] = get_figure(Color.WHITE, FigureType.ROOK)
 
                 expected_board[b_king_cord] = get_figure(Color.BLACK, FigureType.KING)
-                expected_board[b_rook_ks_cord] = get_figure(Color.BLACK, FigureType.ROOK)
+                expected_board[b_rook_ks_cord] = get_figure(
+                    Color.BLACK, FigureType.ROOK
+                )
             else:
                 expected_board[w_king_cord] = get_figure(Color.WHITE, FigureType.KING)
-                expected_board[w_rook_ks_cord] = get_figure(Color.WHITE, FigureType.ROOK)
+                expected_board[w_rook_ks_cord] = get_figure(
+                    Color.WHITE, FigureType.ROOK
+                )
 
                 expected_board[(8, 7)] = get_figure(Color.BLACK, FigureType.KING)
                 expected_board[(8, 6)] = get_figure(Color.BLACK, FigureType.ROOK)
-
 
             expected_board[w_rook_qs_cord] = get_figure(Color.WHITE, FigureType.ROOK)
             expected_board[b_rook_qs_cord] = get_figure(Color.BLACK, FigureType.ROOK)
@@ -116,14 +116,17 @@ class TestStateChanger:
                 expected_board[(1, 4)] = get_figure(Color.WHITE, FigureType.ROOK)
 
                 expected_board[b_king_cord] = get_figure(Color.BLACK, FigureType.KING)
-                expected_board[b_rook_qs_cord] = get_figure(Color.BLACK, FigureType.ROOK)
+                expected_board[b_rook_qs_cord] = get_figure(
+                    Color.BLACK, FigureType.ROOK
+                )
             else:
                 expected_board[w_king_cord] = get_figure(Color.WHITE, FigureType.KING)
-                expected_board[w_rook_qs_cord] = get_figure(Color.WHITE, FigureType.ROOK)
+                expected_board[w_rook_qs_cord] = get_figure(
+                    Color.WHITE, FigureType.ROOK
+                )
 
                 expected_board[(8, 3)] = get_figure(Color.BLACK, FigureType.KING)
                 expected_board[(8, 4)] = get_figure(Color.BLACK, FigureType.ROOK)
-
 
             expected_board[w_rook_ks_cord] = get_figure(Color.WHITE, FigureType.ROOK)
             expected_board[b_rook_ks_cord] = get_figure(Color.BLACK, FigureType.ROOK)
@@ -178,10 +181,10 @@ class TestStateChanger:
 
             expected_board[w_king_cord] = get_figure(Color.WHITE, FigureType.KING)
             expected_board[w_rook_cord] = get_figure(Color.WHITE, FigureType.ROOK)
-            
+
             expected_board[b_king_cord] = get_figure(Color.BLACK, FigureType.KING)
             expected_board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
-            
+
             expected_state = State(expected_board)
 
             current_row = 7 if color == Color.WHITE else 2
@@ -199,8 +202,7 @@ class TestStateChanger:
         knight_cord = (4, 2)
 
         board = self._get_casual_board()
-        
-        
+
         state_changer = StateChanger()
 
         for color in [Color.WHITE, Color.BLACK]:
@@ -232,11 +234,9 @@ class TestStateChanger:
 
         bishop_cord = (3, 2)
         rook_cord = (5, 4)
-        
 
         board = self._get_casual_board()
-        
-        
+
         state_changer = StateChanger()
 
         for color in [Color.WHITE, Color.BLACK]:
@@ -266,10 +266,9 @@ class TestStateChanger:
 
     def test_rook_plain_move(self):
         rook_new_cord = (4, 8)
-        
+
         board = self._get_casual_board()
-        
-        
+
         state_changer = StateChanger()
 
         for row, color in zip([1, 8], [Color.WHITE, Color.BLACK]):

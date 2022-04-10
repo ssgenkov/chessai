@@ -37,9 +37,7 @@ class StateChanger:
             if figure_to_move.figure_type == FigureType.KING:
                 new_state.set_has_moved(color, CastleFigureType.KING)
             elif figure_to_move.figure_type == FigureType.ROOK:
-                if move[CURNT] == get_init_coord(
-                    color, CastleFigureType.ROOK_KINGSIDE
-                ):
+                if move[CURNT] == get_init_coord(color, CastleFigureType.ROOK_KINGSIDE):
                     new_state.set_has_moved(color, CastleFigureType.ROOK_KINGSIDE)
                 elif move[CURNT] == get_init_coord(
                     color, CastleFigureType.ROOK_QUEENSIDE
