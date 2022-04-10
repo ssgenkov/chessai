@@ -74,3 +74,13 @@ class State:
 
     def get_pieces_cords_for_color(self, color):
         return [cord for cord in self._board if self._board[cord].color == color]
+
+    def __eq__(self, obj):
+        return (
+            isinstance(obj, State)
+            and self._board == obj._board
+            and self._has_moved == obj._has_moved
+        )
+
+    def __hash__(self):
+        return hash((frozenset(self._board), frozenset(self._has_moved)))
