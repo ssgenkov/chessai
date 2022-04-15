@@ -40,7 +40,7 @@ class TestStateChanger:
         board[b_rook_cord] = get_figure(Color.BLACK, FigureType.ROOK)
         board[b_pawn_cord] = get_figure(Color.BLACK, FigureType.PAWN)
         board[b_pawn2_cord] = get_figure(Color.BLACK, FigureType.PAWN)
-        board[b_knight_cord] = get_figure(Color.WHITE, FigureType.KNIGHT)
+        board[b_knight_cord] = get_figure(Color.BLACK, FigureType.KNIGHT)
 
         return board
 
