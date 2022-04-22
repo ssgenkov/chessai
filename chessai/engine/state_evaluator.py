@@ -1,8 +1,7 @@
 from chessai.figures.figure_type import FigureType
 
+
 class StateEvaluator:
-
-
     def __init__(self, piece_value=None):
 
         if piece_value:
@@ -18,11 +17,10 @@ class StateEvaluator:
 
     def evaluate(self, color, state):
         figures_cords = state.get_pieces_cords_for_color(color)
-        
+
         h_value = 0
         for cords in figures_cords:
             figure = state.get_figure_by_cord(cords)
             h_value += self._piece_value[figure.figure_type]
 
         return h_value
-        
