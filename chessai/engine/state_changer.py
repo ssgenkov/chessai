@@ -53,8 +53,8 @@ class StateChanger:
         return new_state
 
     def _apply_move(self, state, move):
-        state.remove_figure_by_cord(move[DEST])
         figure_to_move = state.get_figure_by_cord(move[CURNT])
+        state.remove_figure_by_cord(move[DEST])
         state.remove_figure_by_cord(move[CURNT])
         state.add_figure(move[DEST], figure_to_move)
 

@@ -1,3 +1,5 @@
+from chessai.utils.color import Color
+
 class HeuristicAlphaBetaSearch:
     def __init__(self, max_depth):
         self._max_depth = max_depth
@@ -16,10 +18,12 @@ class HeuristicAlphaBetaSearch:
 
         v = float("-inf")
 
+        opposite_color = color.BLACK if color == Color.WHITE else Color.WHITE
+
         for action in game.get_actions(color, state):
             v2, a2 = self.min_value(
                 depth + 1,
-                color,
+                opposite_color,
                 game,
                 game.get_result(color, state, action),
                 alpha,
@@ -36,14 +40,15 @@ class HeuristicAlphaBetaSearch:
         if game.is_terminal(color, state):
             return game.get_utility(color, state), None
         if self._max_depth == depth:
-            return game.get_heuristic(color, state), None
+            return (-1)*game.get_heuristic(color, state), None
 
         v = float("inf")
 
+        opposite_color = color.BLACK if color == Color.WHITE else Color.WHITE
         for action in game.get_actions(color, state):
             v2, a2 = self.max_value(
                 depth + 1,
-                color,
+                opposite_color,
                 game,
                 game.get_result(color, state, action),
                 alpha,
