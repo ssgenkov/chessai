@@ -15,6 +15,9 @@ class StateEvaluator:
             self._piece_value[FigureType.ROOK] = 5.63
             self._piece_value[FigureType.QUEEN] = 9.5
 
+    def get_piece_value(self, figure_type):
+        return self._piece_value[figure_type]
+
     def evaluate(self, color, state):
         figures_cords = state.get_pieces_cords_for_color(color)
 
